@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     // Filter Now Playing: Must have poster + release_date, and be within last 2 months
     fetchNowPlaying().then((movies) => {
-      const filtered = movies.filter((m) =>
+      const filtered = movies.filter((m: any) =>
         m.poster_path &&
         m.release_date &&
         new Date(m.release_date) >= new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
@@ -27,7 +27,7 @@ export default function Home() {
       const sixMonthsFromNow = new Date();
       sixMonthsFromNow.setMonth(today.getMonth() + 6);
 
-      const filtered = movies.filter((m) => {
+      const filtered = movies.filter((m: any) => {
         const release = new Date(m.release_date);
         return (
           m.poster_path &&
