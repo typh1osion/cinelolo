@@ -1,11 +1,12 @@
 // src/screens/Viewing.tsx
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchMovieDetails } from "../api/tmdb";
 import { saveFavorite, removeFavorite, getFavorites } from "../utils/storage";
 
 export default function Viewing() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [movie, setMovie] = useState<any>(null);
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -33,6 +34,22 @@ export default function Viewing() {
 
   return (
     <div style={{ padding: "1rem" }}>
+      <button
+        onClick={() => navigate(-1)}
+        style={{
+          marginBottom: "1rem",
+          fontSize: "1rem",
+          background: "none",
+          color: "white",
+          border: "1px solid #666",
+          borderRadius: "6px",
+          padding: "0.5rem 1rem",
+          cursor: "pointer",
+        }}
+      >
+        ← Back
+      </button>
+
       <h2>{movie.title}</h2>
       <p>Release Date: {movie.release_date}</p>
 
