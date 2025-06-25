@@ -33,7 +33,7 @@ export default function Viewing() {
   );
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div style={{ padding: "1rem", paddingTop: "4rem" }}>
       <button
         onClick={() => navigate(-1)}
         style={{
@@ -50,7 +50,31 @@ export default function Viewing() {
         ← Back
       </button>
 
-      <h2>{movie.title}</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          gap: "1rem",
+          marginBottom: "0.5rem",
+        }}
+      >
+        <h2 style={{ margin: 0 }}>{movie.title}</h2>
+        <button
+          onClick={toggleFavorite}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "1.5rem",
+            color: isFavorite ? "white" : "#888",
+          }}
+          aria-label="Toggle Favorite"
+        >
+          {isFavorite ? "♥" : "♡"}
+        </button>
+      </div>
+
       <p>Release Date: {movie.release_date}</p>
 
       {trailer ? (
@@ -65,20 +89,6 @@ export default function Viewing() {
       ) : (
         <p>No trailer available</p>
       )}
-
-      <button
-        onClick={toggleFavorite}
-        style={{
-          marginTop: "1rem",
-          background: "none",
-          color: isFavorite ? "red" : "white",
-          fontSize: "2rem",
-          border: "none",
-          cursor: "pointer",
-        }}
-      >
-        {isFavorite ? "♥" : "♡"}
-      </button>
     </div>
   );
 }
