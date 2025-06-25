@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { fetchMovieDetails } from "../api/tmdb";
 import { saveFavorite, removeFavorite, getFavorites } from "../utils/storage";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 export default function Viewing() {
   const { id } = useParams();
@@ -66,12 +67,12 @@ export default function Viewing() {
             background: "none",
             border: "none",
             cursor: "pointer",
-            fontSize: "1.5rem",
-            color: isFavorite ? "white" : "#888",
+            fontSize: "1.8rem",
+            color: "white",
           }}
           aria-label="Toggle Favorite"
         >
-          {isFavorite ? "♥" : "♡"}
+          {isFavorite ? <FaHeart /> : <FaRegHeart />}
         </button>
       </div>
 
