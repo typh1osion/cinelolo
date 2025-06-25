@@ -15,7 +15,8 @@ export default function Favorites() {
   }, []);
 
   return (
-    <div style={{ paddingBottom: "4rem" }}>
+
+    <div style={{ padding: "4rem 1rem 4rem 1rem" }}>
       <h2 style={{ padding: "1rem" }}>Saved Trailers</h2>
 
       {favorites.length === 0 ? (
