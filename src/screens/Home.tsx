@@ -47,7 +47,7 @@ export default function Home() {
   return (
     <div style={{ padding: "1rem 1rem 4rem 1rem" }}>
       <h2>Now Playing</h2>
-    <div style={{ maxHeight: "28vh overflowY: "hidden" }}>	
+    <div style={{ maxHeight: "28vh", overflowY: "hidden" }}>	
       <div style={{ display: "flex", overflowX: "scroll", gap: "1rem" }}>
         {nowPlaying.map(movie => (
           <TrailerCard key={movie.id} movie={movie} />
