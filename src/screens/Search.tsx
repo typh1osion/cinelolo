@@ -16,6 +16,7 @@ export default function Search() {
   };
 
   return (
+<div style={{ padding: "4rem 1rem 4rem 1rem" }}>
     <div style={{ paddingBottom: "4rem" }}>
       <form onSubmit={handleSearch} style={{ padding: "1rem" }}>
         <input
@@ -43,5 +44,6 @@ export default function Search() {
 
       <NavBar />
     </div>
+</div>
   );
 }
