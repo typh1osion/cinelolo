@@ -82,7 +82,7 @@ export default function Viewing() {
         <iframe
           width="100%"
           height="200"
-          src={`https://www.youtube.com/embed/${trailer.key}`}
+          src={`https://www.youtube.com/embed/${trailer.key}?cc_load_policy=1`}
           title={trailer.name}
           frameBorder="0"
           allowFullScreen
