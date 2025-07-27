@@ -11,34 +11,43 @@ export default function Home() {
   const [favorites, setFavorites] = useState<any[]>([]);
 
   useEffect(() => {
-    // Filter Now Playing: Must have poster + release_date, and be within last 2 months
-    fetchNowPlaying().then((movies) => {
-  const twoMonthsAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
-  const today = new Date();
+    // ✅ Filter Now Playing
+    fetchNowPlaying().then(async (movies) => {
+      const twoMonthsAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
+      const today = new Date();
 
-  const filtered = movies
-    .filter((m: any) => {
-      const release = new Date(m.release_date);
-      return (
-        m.poster_path &&
-        m.release_date &&
-        release >= twoMonthsAgo &&
-        release <= today // ✅ exclude future releases
+      const validMovies = movies.filter((m: any) => {
+        const release = new Date(m.release_date);
+        return (
+          m.poster_path &&
+          m.release_date &&
+          release >= twoMonthsAgo &&
+          release <= today
+        );
+      });
+
+      const withTrailers: any[] = [];
+      for (const movie of validMovies) {
+        const details = await fetchMovieDetails(movie.id);
+        const hasTrailer = details.videos?.results?.some(
+          (v: any) => v.type === "Trailer" && v.site === "YouTube"
+        );
+        if (hasTrailer) withTrailers.push(movie);
+      }
+
+      withTrailers.sort(
+        (a: any, b: any) => new Date(b.release_date).getTime() - new Date(a.release_date).getTime()
       );
-    })
-    .sort((a: any, b: any) => new Date(b.release_date) - new Date(a.release_date)); // Sort: newest first
+      setNowPlaying(withTrailers);
+    });
 
-  setNowPlaying(filtered);
-});
-
-
-    // Filter Coming Soon: Must have poster + future release_date within next 6 months
-    fetchComingSoon().then((movies) => {
+    // ✅ Filter Coming Soon
+    fetchComingSoon().then(async (movies) => {
       const today = new Date();
       const sixMonthsFromNow = new Date();
       sixMonthsFromNow.setMonth(today.getMonth() + 6);
 
-      const filtered = movies.filter((m: any) => {
+      const validMovies = movies.filter((m: any) => {
         const release = new Date(m.release_date);
         return (
           m.poster_path &&
@@ -46,35 +55,47 @@ export default function Home() {
           release > today &&
           release <= sixMonthsFromNow
         );
-      })
-        .sort((a: any, b: any) => new Date(a.release_date) - new Date(b.release_date)); // Sort: newest first
-      setComingSoon(filtered);
+      });
+
+      const withTrailers: any[] = [];
+      for (const movie of validMovies) {
+        const details = await fetchMovieDetails(movie.id);
+        const hasTrailer = details.videos?.results?.some(
+          (v: any) => v.type === "Trailer" && v.site === "YouTube"
+        );
+        if (hasTrailer) withTrailers.push(movie);
+      }
+
+      withTrailers.sort(
+        (a: any, b: any) => new Date(a.release_date).getTime() - new Date(b.release_date).getTime()
+      );
+      setComingSoon(withTrailers);
     });
 
-    // Load saved favorites
+    // ✅ Load Saved Trailers
     const favoriteIds = getFavorites();
-    Promise.all(favoriteIds.map(id => fetchMovieDetails(id))).then(setFavorites);
+    Promise.all(favoriteIds.map((id) => fetchMovieDetails(id))).then(setFavorites);
   }, []);
 
   return (
     <div style={{ padding: "4rem 1rem 4rem 1rem" }}>
       <h2>Now Playing</h2>
       <div style={{ display: "flex", overflowX: "scroll", gap: "1rem" }}>
-        {nowPlaying.map(movie => (
+        {nowPlaying.map((movie) => (
           <TrailerCard key={movie.id} movie={movie} />
         ))}
       </div>
 
       <h2>Coming Soon</h2>
       <div style={{ display: "flex", overflowX: "scroll", gap: "1rem" }}>
-        {comingSoon.map(movie => (
+        {comingSoon.map((movie) => (
           <TrailerCard key={movie.id} movie={movie} />
         ))}
       </div>
 
       <h2>Saved Trailers</h2>
       <div style={{ display: "flex", overflowX: "scroll", gap: "1rem" }}>
-        {favorites.map(movie => (
+        {favorites.map((movie) => (
           <TrailerCard key={movie.id} movie={movie} />
         ))}
       </div>
@@ -82,4 +103,5 @@ export default function Home() {
       <NavBar />
     </div>
   );
+
 }
