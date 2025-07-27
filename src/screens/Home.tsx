@@ -13,14 +13,24 @@ export default function Home() {
   useEffect(() => {
     // Filter Now Playing: Must have poster + release_date, and be within last 2 months
     fetchNowPlaying().then((movies) => {
-      const filtered = movies.filter((m: any) =>
+  const twoMonthsAgo = new Date(Date.now() - 60 * 24 * 60 * 60 * 1000);
+  const today = new Date();
+
+  const filtered = movies
+    .filter((m: any) => {
+      const release = new Date(m.release_date);
+      return (
         m.poster_path &&
         m.release_date &&
-        new Date(m.release_date) >= new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
-      )
-       .sort((a: any, b: any) => new Date(b.release_date) - new Date(a.release_date)); // Sort: newest first
-      setNowPlaying(filtered);
-    });
+        release >= twoMonthsAgo &&
+        release <= today // ✅ exclude future releases
+      );
+    })
+    .sort((a: any, b: any) => new Date(b.release_date) - new Date(a.release_date)); // Sort: newest first
+
+  setNowPlaying(filtered);
+});
+
 
     // Filter Coming Soon: Must have poster + future release_date within next 6 months
     fetchComingSoon().then((movies) => {
