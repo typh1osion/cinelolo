@@ -17,7 +17,8 @@ export default function Home() {
         m.poster_path &&
         m.release_date &&
         new Date(m.release_date) >= new Date(Date.now() - 60 * 24 * 60 * 60 * 1000)
-      );
+      )
+       .sort((a: any, b: any) => new Date(b.release_date) - new Date(a.release_date)); // Sort: newest first
       setNowPlaying(filtered);
     });
 
@@ -35,7 +36,8 @@ export default function Home() {
           release > today &&
           release <= sixMonthsFromNow
         );
-      });
+      })
+        .sort((a: any, b: any) => new Date(a.release_date) - new Date(b.release_date)); // Sort: newest first
       setComingSoon(filtered);
     });
 
